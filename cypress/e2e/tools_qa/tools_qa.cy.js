@@ -3,13 +3,15 @@ Cypress.on('uncaught:exception', (err, runnable) => {
       // Retorna false para ignorar o erro e não falhar o teste
       return false;
     }
-  });
+});
+
 
 describe('automação de testes com toolsQA', ()=>{
     beforeEach (()=> {
         cy.visit('https://demoqa.com/ '); // Acessa a URL
         cy.get('#app header a img[src="/images/Toolsqa.jpg"]').should('be.visible');
     });
+
 
     it('Testa o numero de cards e recupera o texto deles', () => { 
         cy.get('.card-body').should('have.length', 6);//verifica se exitem 6 cards na tela
@@ -40,7 +42,7 @@ describe('automação de testes com toolsQA', ()=>{
         cy.get('#app header a img[src="/images/Toolsqa.jpg"]').click();
     });
 
-    it.only('testando card elements - checkbox', ()=> {
+    it('testando card elements - checkbox', ()=> {
         cy.contains('.card-body', 'Elements').click();
         cy.url().should('include', '/elements');
         cy.get('#item-1').should('have.text','Check Box').click();
@@ -80,13 +82,34 @@ describe('automação de testes com toolsQA', ()=>{
                 cy.contains('.rct-title', 'Word File.doc'). should('be.visible');
                 cy.contains('.rct-title', 'Excel File.doc'). should('be.visible');
                 cy.get ('button[aria-label="Toggle"]').eq(3).click();
-        
             }
-        });    
+        
+        });
     });
-    
 
+    it.only('testando o card elements - Radio Button', () =>{
+        cy.contains('.card-body', 'Elements').click();
+        cy.get('#item-2').should('have.text', 'Radio Button').click();
+        cy.url().should('include', '/radio-button');
+        cy.get('.text-center').should ('have.text', 'Radio Button');
+        cy.get('.mb-3').should('be.visible').then(($el)=>{
+            cy.log($el.text());
+        })
+
+        
+        cy.get('.custom-control-label')        
+        .each(($el, index)=>{
+            const radioText = $el.text().trim();
+            cy.log(`opção ${index+1}: ${radioText}`);
+            
+            cy.wrap($el).click().then(() => {
+                cy.get('.mt-3').each(($el, index) =>{
+                    const responseOption = $el.text();
+                    cy.log(`${index + 1}: ${responseOption}`)
+                });
+            });
+            
+        });
+        
+    });
 });
-
-
-
