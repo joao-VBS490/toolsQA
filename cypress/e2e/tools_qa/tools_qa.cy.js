@@ -48,7 +48,7 @@ describe('automação de testes com toolsQA', ()=>{
         cy.get('#item-1').should('have.text','Check Box').click();
         cy.get('.text-center').should('have.text','Check Box');
         cy.get('.rct-checkbox').click();
-        cy.get('#result').should('be.visible').then(($el)=> { // verifica o texto retornado após clicar no checkbox e printa no log
+        cy.get('#result').should('be.visible').then(($el)=> { // verifica o texto retornado após clicar no checkbox e printa no log//
             cy.log($el.text());
         });
         cy.get('.rct-checkbox').click();
@@ -87,29 +87,32 @@ describe('automação de testes com toolsQA', ()=>{
         });
     });
 
-    it.only('testando o card elements - Radio Button', () =>{
+    it('testando o card elements - Radio Button', () =>{
         cy.contains('.card-body', 'Elements').click();
         cy.get('#item-2').should('have.text', 'Radio Button').click();
         cy.url().should('include', '/radio-button');
         cy.get('.text-center').should ('have.text', 'Radio Button');
-        cy.get('.mb-3').should('be.visible').then(($el)=>{
+        cy.get('.mb-3').should('be.visible').then(($el)=>{ //retorna o texto do you like this site//
             cy.log($el.text());
         })
-
-        
-        cy.get('.custom-control-label')        
-        .each(($el, index)=>{
+        cy.get('.custom-control-label') //Recupera o campo clicavel das opções (Yes, Impressive, No)//     
+        .each(($el, index)=>{  
             const radioText = $el.text().trim();
-            cy.log(`opção ${index+1}: ${radioText}`);
+            cy.log(`opção ${index+1}: ${radioText}`); //Mostra no log cada uma das opções//
             
-            cy.wrap($el).click().then(() => {
-                cy.get('.mt-3').each(($el, index) =>{
+            cy.wrap($el).click().then(() => { //Clica em cada uma das opções//
+                cy.get('.mt-3').each(($el, index) =>{ //Texto de sucesso das opções//
                     const responseOption = $el.text();
-                    cy.log(`${index + 1}: ${responseOption}`)
+                    cy.log(`${index + 1}: ${responseOption}`) //Retorna no console a opção selecionada e o texto de sucesso dela//
                 });
             });
             
-        });
-        
+        });        
     });
+    it.only('testando card elements - web tables', () =>{
+        cy.contains('.card-body', 'Elements').click()
+        cy.get('#item-3').should('have.text', 'Web Tables').click();
+        cy.url().should('include', '/webtables');
+        cy.get('.text-center').should('have.text', 'Web Tables').should('be.visible');
+    })
 });
