@@ -112,7 +112,7 @@ describe('automação de testes com toolsQA', ()=>{
             
         });        
     });
-    it.only('testando card elements - web tables', () =>{
+    it('testando card elements - web tables', () =>{
        
         let name = faker.person.firstName();
         let lastName = faker.person.lastName();
@@ -155,4 +155,29 @@ describe('automação de testes com toolsQA', ()=>{
         cy.get('#searchBox').clear();
         cy.get('.rt-table').should('not.contain', `${name}edit`);
     })
+
+    it.only('testando card elements - buttons', () => {
+        cy.contains('.card-body', 'Elements').click();
+        cy.get('#item-4').should('have.text', 'Buttons').click();
+        cy.url().should('include', '/buttons');
+        cy.get('.text-center').should('have.text', 'Buttons');
+        cy.get('#doubleClickBtn').should('be.visible').dblclick();
+        cy.get('#doubleClickMessage').should('be.visible').then(($doubleClickMessage) => {
+            const doubleClickText = $doubleClickMessage.text();
+            cy.log( doubleClickText);
+            expect(doubleClickText).to.include('You have done a double click');
+        });
+        cy.get('.btn:contains("Click Me")').last().should('be.visible').click();
+        cy.get('#dynamicClickMessage').should('be.visible').then(($clickMessage) => {
+            const clickText = $clickMessage.text();
+            cy.log(clickText);
+            expect(clickText).to.include('You have done a dynamic click');
+        });
+        cy.get('#rightClickBtn').should('be.visible').rightclick();
+        cy.get('#rightClickMessage').should('be.visible').then(($rightClickMessage) => {
+            const rightClickText = $rightClickMessage.text();
+            cy.log(rightClickText);
+            expect(rightClickText).to.include('You have done a right click');
+        });
+    });
 });
