@@ -1,13 +1,22 @@
+import {faker} from '@faker-js/faker';
 Cypress.on('uncaught:exception', (err, runnable) => {
     if (err.message.includes('Script error.')) {
       // Retorna false para ignorar o erro e não falhar o teste
       return false;
     }
 });
+let name = faker.person.firstName();
+let lastName = faker.person.lastName();
+let email = faker.internet.email(name, lastName);
+let age = faker.number.int({ min: 18, max: 65 });
+let salary = faker.number.int({ min: 3000, max: 10000 });
+let department = faker.commerce.department();
+let sucess;
 
 
 describe('automação de testes com toolsQA', ()=>{
     beforeEach (()=> {
+        cy.viewport(1366, 780);
         cy.visit('https://demoqa.com/ '); // Acessa a URL
         cy.get('#app header a img[src="/images/Toolsqa.jpg"]').should('be.visible');
     });
@@ -110,9 +119,38 @@ describe('automação de testes com toolsQA', ()=>{
         });        
     });
     it.only('testando card elements - web tables', () =>{
+        
+        //criação
         cy.contains('.card-body', 'Elements').click()
         cy.get('#item-3').should('have.text', 'Web Tables').click();
         cy.url().should('include', '/webtables');
         cy.get('.text-center').should('have.text', 'Web Tables').should('be.visible');
+        cy.get('#addNewRecordButton').should('be.visible').click();
+        cy.get('#firstName').click().type(name);
+        cy.get('#lastName').click().type(lastName);
+        cy.get('#userEmail').click().type(email);
+        cy.get('#age').click().type(age);
+        cy.get('#salary').click().type(salary);
+        cy.get('#department').click().type(department);
+        cy.get('#submit').click();
+        cy.get('#searchBox').click().type(name);
+        cy.get('.rt-td').first().should(`have.text`, name);
+        cy.get('#edit-record-4').click();
+        
+        //edição
+        cy.get('.modal-content').should('be.visible');
+        cy.get('#firstName').click().clear().type(`${name}edit`);
+        cy.get('#lastName').click().clear().type(`${lastName}edit`);
+        cy.get('#userEmail').click().clear().type(`edit${email}`);
+        cy.get('#age').click().type(age + 1);
+        cy.get('#salary').clear().click().type(salary + 1000);
+        cy.get('#department').clear().click().type(`${department}edit`);
+        cy.get('#submit').click();
+        cy.get('#delete-record-4').click();
+        cy.get('.modal-content').should('not.exist').then(() => {
+            cy.log('Modal closed successfully');
+        });
+        cy.get('#searchBox').clear();
+        cy.get('.rt-table').should('not.contain', `${name}edit`);
     })
 });
