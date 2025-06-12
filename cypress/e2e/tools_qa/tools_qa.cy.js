@@ -5,13 +5,7 @@ Cypress.on('uncaught:exception', (err, runnable) => {
       return false;
     }
 });
-let name = faker.person.firstName();
-let lastName = faker.person.lastName();
-let email = faker.internet.email(name, lastName);
-let age = faker.number.int({ min: 18, max: 65 });
-let salary = faker.number.int({ min: 3000, max: 10000 });
-let department = faker.commerce.department();
-let sucess;
+
 
 
 describe('automação de testes com toolsQA', ()=>{
@@ -119,6 +113,14 @@ describe('automação de testes com toolsQA', ()=>{
         });        
     });
     it.only('testando card elements - web tables', () =>{
+       
+        let name = faker.person.firstName();
+        let lastName = faker.person.lastName();
+        let email = faker.internet.email(name, lastName);
+        let age = faker.number.int({ min: 18, max: 65 });
+        let salary = faker.number.int({ min: 3000, max: 10000 });
+        let department = faker.commerce.department();
+        let sucess;
         
         //criação
         cy.contains('.card-body', 'Elements').click()
