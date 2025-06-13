@@ -156,7 +156,7 @@ describe('automação de testes com toolsQA', ()=>{
         cy.get('.rt-table').should('not.contain', `${name}edit`);
     })
 
-    it.only('testando card elements - buttons', () => {
+    it('testando card elements - buttons', () => {
         cy.contains('.card-body', 'Elements').click();
         cy.get('#item-4').should('have.text', 'Buttons').click();
         cy.url().should('include', '/buttons');
@@ -178,6 +178,117 @@ describe('automação de testes com toolsQA', ()=>{
             const rightClickText = $rightClickMessage.text();
             cy.log(rightClickText);
             expect(rightClickText).to.include('You have done a right click');
+        });
+                
+    });
+    
+    it.only('testando card elements - links', () => {
+        //clica no link pra página inicial e volta pra pagina de links
+        cy.contains('.card-body', 'Elements').click();
+        cy.get('#item-5').should('have.text', 'Links').click();
+        cy.url().should('include', '/links');
+        cy.get('.text-center').should('have.text', 'Links');
+        cy.get('#simpleLink')
+            .should('have.attr', 'href', 'https://demoqa.com')
+            .invoke('removeAttr', 'target')
+            .click();
+            cy.url().should('include', 'https://demoqa.com');
+        cy.go('back');
+
+        //clica no link pra página de links e volta pra pagina de links
+        cy.url().should('include', '/links');
+        cy.get('.text-center').should('have.text', 'Links');
+        cy.get('#dynamicLink')
+            .should('have.attr', 'href', 'https://demoqa.com')
+            .invoke('removeAttr', 'target')
+            .click();
+            cy.url().should('include', 'https://demoqa.com');
+        cy.go('back');
+
+        //envia uma request 
+        cy.get('#created').click();
+        cy.request({
+            method: 'GET',
+            url: 'https://demoqa.com/created',
+            expectedStatusCode: 201
+        }).then((linkResponse) => {
+            cy.get('#linkResponse').should('be.visible').then(($linkResponse) => {
+                const responseText = $linkResponse.text();
+                cy.log(responseText);
+            })       
+        });
+        
+        cy.get('#no-content').click();
+        cy.request({
+            method: 'GET',
+            url: 'https://demoqa.com/no-content',
+            expectedStatusCode: 204
+        }).then((linkResponse) => {
+            cy.get('#linkResponse').should('be.visible').then(($linkResponse) => {
+                const responseText = $linkResponse.text();
+                cy.log(responseText);
+            })       
+        });
+
+        cy.get('#moved').click();
+        cy.request({
+            method: 'GET',
+            url: 'https://demoqa.com/moved',
+            expectedStatusCode: 301
+        }).then((linkResponse) => {
+            cy.get('#linkResponse').should('be.visible').then(($linkResponse) => {
+                const responseText = $linkResponse.text();
+                cy.log(responseText);
+            })       
+        });
+
+        cy.get('#bad-request').click();
+        cy.request({
+            method: 'GET',
+            url: 'https://demoqa.com/bad-request',
+            expectedStatusCode: 400,
+            failOnStatusCode: false 
+        }).then((linkResponse) => {
+            cy.get('#linkResponse').should('be.visible').then(($linkResponse) => {
+                const responseText = $linkResponse.text();
+                cy.log(responseText);
+            })       
+        });
+        cy.get('#unauthorized').click();
+        cy.request({
+            method: 'GET',
+            url: 'https://demoqa.com/unauthorized',
+            expectedStatusCode: 401,
+            failOnStatusCode: false 
+        }).then((linkResponse) => {
+            cy.get('#linkResponse').should('be.visible').then(($linkResponse) => {
+                const responseText = $linkResponse.text();
+                cy.log(responseText);
+            })       
+        });
+        cy.get('#forbidden').click();
+        cy.request({
+            method: 'GET',
+            url: 'https://demoqa.com/forbidden',
+            expectedStatusCode: 403,
+            failOnStatusCode: false 
+        }).then((linkResponse) => {
+            cy.get('#linkResponse').should('be.visible').then(($linkResponse) => {
+                const responseText = $linkResponse.text();
+                cy.log(responseText);
+            })       
+        });
+        cy.get('#invalid-url').click();
+        cy.request({
+            method: 'GET',
+            url: 'https://demoqa.com/not-found',
+            expectedStatusCode: 404,
+            failOnStatusCode: false
+        }).then((linkResponse) => {
+            cy.get('#linkResponse').should('be.visible').then(($linkResponse) => {
+                const responseText = $linkResponse.text();
+                cy.log(responseText);
+            })       
         });
     });
 });
