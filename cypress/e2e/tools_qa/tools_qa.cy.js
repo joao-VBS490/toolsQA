@@ -182,7 +182,7 @@ describe('automação de testes com toolsQA', ()=>{
                 
     });
     
-    it.only('testando card elements - links', () => {
+    it('testando card elements - links', () => {
         //clica no link pra página inicial e volta pra pagina de links
         cy.contains('.card-body', 'Elements').click();
         cy.get('#item-5').should('have.text', 'Links').click();
@@ -290,5 +290,19 @@ describe('automação de testes com toolsQA', ()=>{
                 cy.log(responseText);
             })       
         });
+    });
+    it.only('testando card elements - broken links', () => {
+        cy.contains('.card-body', 'Elements').click();
+        cy.get('#item-6').should('have.text', 'Broken Links - Images').click();
+        cy.url().should('include', '/broken');
+        cy.get('.text-center').should('have.text', 'Broken Links - Images');
+        cy.contains('p', 'Valid image').first()
+            cy.get('img[src="/images/Toolsqa.jpg"]').should('be.visible')
+            .log('Imagem válida encontrada');
+        cy.contains('p', 'Broken image').first()
+            cy.get('img[src="/images/Toolsqa_1.jpg"]').should('be.visible')
+            .log('imagem quebrada')
+        
+            
     });
 });
