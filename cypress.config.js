@@ -1,23 +1,27 @@
+const fs = require('fs');
+const path = require('path');
+const { faker } = require('@faker-js/faker');
+
 module.exports = {
   e2e: {
     setupNodeEvents(on, config) {
-    import {defineConfig} from 'cypress';
-    import {faker} from '@faker-js/faker';
-    
-      export default defineConfig({
-        e2e: { 
-          setupNodeEvents(on, config){
-              on('task', {generateFakeUser() {
-                let name = faker.person.firstName();
-                let lastName = faker.person.lastName();
-                let nickname = faker.internet.username();
-                let password = "Cz1!qw2@#34"
-              }
+      on('task', {
+        generateFakeUser() {
+          const userData = {
+            name: faker.person.firstName(),
+            lastName: faker.person.lastName(),
+            username: faker.internet.username(),
+            password: 'Cz1!qw2@#34'
+          };
 
-            })
-          }
-        }
-      })
+          // Caminho para salvar o JSON
+          const filePath = path.join(__dirname, 'cypress', 'fixtures', 'fakeUser.json');
+
+          fs.writeFileSync(filePath, JSON.stringify(userData, null, 2), 'utf-8');
+
+          return userData;
+        },
+      });
     },
   },
 };
