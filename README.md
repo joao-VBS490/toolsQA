@@ -19,6 +19,7 @@ Este projeto tem como objetivo a automação de testes E2E utilizando **Cypress*
 ```bash
 📁 cypress
  ┣ 📁 e2e
+ |┣ 📁 pagina_de_livros
  ┃ ┣ 📄 cria_registro.cy.js        # Teste de criação de usuário
  ┃ ┣ 📄 faz_login.cy.js           # Teste de login com o usuário criado
  ┃ ┣ 📄 add_livros.cy.js          # Teste de navegação e visualização de livros
