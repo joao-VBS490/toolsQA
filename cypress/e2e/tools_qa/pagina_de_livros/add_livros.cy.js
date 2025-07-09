@@ -32,7 +32,12 @@ describe('Adicionar livros', () => {
       });
       cy.get('.books-wrapper').then(($book) => {
         cy.contains('a', 'Git Pocket Guide').click();
-        
+        console.log('redirecionado para a pagina do livro com sucesso');
+        cy.go('back');
+        cy.get('#submit').click().then(() => {
+          cy.url().should('include', '/login');
+          console.log('usuario deslogado');
+        })
       });
     });
   }));
