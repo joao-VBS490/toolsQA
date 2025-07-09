@@ -15,31 +15,25 @@ Cypress.on('uncaught:exception', (err, runnable) => {
 describe('Adicionar livros', () => {
   beforeEach(() => {
     cy.viewport(1366, 780);
-    cy.visit('https://demoqa.com/books'); // Acessa a URL
+    cy.visit('https://demoqa.com/login'); // Acessa a URL
     cy.get('#app header a img[src="/images/Toolsqa.jpg"]').should('be.visible');
   });
-
-  it('fazendo login', ()=> {
+  it('adicionando um livro', (() => {
     cy.fixture('fakeUser.json').then((userData) => {
-      cy.get('.books-wrapper').then(()=> {
-        console.log('sucesso, estamos na pagina de livros');
-      });
-      cy.get('#login')
-        .click();
-      cy.url().should('include', '/login');
-      cy.get('.login-wrapper').then(() => {
-        console.log('sucesso, redirecionado para a tela de login');
-      });
       cy.get('#userName')
         .type(userData.username);
       cy.get('#password')
         .type(userData.password);
       cy.get('#login')
         .click();
-      cy.get('#userName-value')
-        .should('be.visible')
-        .contains(userData.username);
-      
+      cy.get('#gotoStore').click();
+      cy.url().should('include', '/books').then(() => {
+        console.log('redirecinado para a pagina de livros com sucesso');
+      });
+      cy.get('.books-wrapper').then(($book) => {
+        cy.contains('a', 'Git Pocket Guide').click();
+        
+      });
     });
-  });
+  }));
 });
