@@ -8,12 +8,11 @@ module.exports = {
       on('task', {
         generateFakeUser() {
           const userData = {
-            name: faker.person.firstName(),
+            firstName: faker.person.firstName(),
             lastName: faker.person.lastName(),
             username: faker.internet.username(),
             password: 'Cz1!qw2@#34'
           };
-
           // Caminho para salvar o JSON
           const filePath = path.join(__dirname, 'cypress', 'fixtures', 'fakeUser.json');
 
@@ -21,7 +20,15 @@ module.exports = {
 
           return userData;
         },
+        salvarUsuario(user){
+          const filePath = path.resolve('cypress/fixtures/fakeUser.json');
+          fs.writeFileSync(filePath, JSON.stringify(user, null, 2));
+          return null;
+        }
       });
     },
   },
 };
+
+
+
